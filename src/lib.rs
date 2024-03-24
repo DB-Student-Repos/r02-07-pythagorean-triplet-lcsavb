@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use num::integer::gcd;
 
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     let mut triplets = HashSet::new();
@@ -10,7 +11,7 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     find_squares(sum as u32)
         .iter()
         .for_each(|&(m, n)| {
-            if have_different_parity(m, n) && are_coprime(m as u32, n as u32, sum) {
+            if have_different_parity(m, n) && are_coprime(m as u32, n as u32) {
                 let a = m*m - n*n;
                 let b = 2*m*n;
                 let c = m*m + n*n;
@@ -26,26 +27,10 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
 
 }
 
-fn gcd(mut a: u32, mut b: u32, mut c: u32) -> u32 {
-    let mut d = a;
 
-    while b != 0 {
-        d = b;
-        b = a % b;
-        a = d;
-    }
 
-    while c != 0 {
-        d = c;
-        c = a % c;
-        a = d;
-    }
-
-    d
-}
-
-fn are_coprime(a: u32, b: u32, c: u32) -> bool {
-    gcd(a, b, c) == 1
+fn are_coprime(a: u32, b: u32) -> bool {
+    gcd(a, b) == 1
 }
 
 fn have_different_parity(a: u32, b: u32) -> bool {
