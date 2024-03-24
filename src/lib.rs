@@ -13,6 +13,11 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     find_squares(sum as u32)
         .iter()
         .for_each(|&(m, n)| {
+            if have_different_parity(m, n) && are_coprime(m, n) {
+                let a = m.pow(2) - n.pow(2);
+                let b = 2 * m * n;
+                triplets.insert([a, b, sum]);
+            }
 
         });
 
