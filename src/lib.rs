@@ -1,31 +1,50 @@
 use std::collections::HashSet;
-use num::integer::gcd;
 
-// Euclid's formula
-// a = m^2 - n^2, b = 2mn, c = m^2 + n^2
+// rearranged pythagorean theorem method
+// Big O: O(n)
 
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     let mut triplets = HashSet::new();
 
-    // Precompute squares
-    let squares: Vec<u32> = (0..=sum).map(|x| x * x).collect();
+    // Loop through possible values of 'a' (shortest side)
+    for a in 1..=sum / 3 {
+        
+        // Calculate the remaining sum for sides 'b' and 'c'
+        let sum_bc = sum - a;
 
-    for m in 2..sum {
-        for n in 1..m {
-            if (m - n) % 2 == 1 && gcd(m, n) == 1 {
-                for k in 1..=sum / (2 * m * m) {
-                    let a = k * (squares[m as usize] - squares[n as usize]);
-                    let b = k * 2 * m * n;
-                    let c = k * (squares[m as usize] + squares[n as usize]);
-                    if a + b + c > sum {
-                        break;
-                    }
-                    if a + b + c == sum {
-                        let mut triplet = [a, b, c];
-                        triplet.sort();
-                        triplets.insert(triplet);
-                    }
-                }
+        // Given a Pythagorean triplet (a, b, c), where a, b, and c are the lengths 
+        // of the sides of a right-angled triangle, the Pythagorean theorem states that a² + b² = c². 
+        //
+        // Also, given that the sum of the sides of the triangle is a constant (let's call it `sum`), 
+        // we have a + b + c = `sum`, which can be rearranged to b + c = `sum - a` (let's call this `sum_bc`).
+        //
+        // Now, if we square both sides of the equation b + c = `sum_bc`, we get b² + 2bc + c² = (`sum_bc`)².
+        //
+        // Substituting a² + b² = c² into the equation, we get a² + 2bc = (`sum_bc`)² - a².
+        //
+        // Rearranging for b, we get b = ((`sum_bc`)² - a²) / 2bc.
+        //
+        //- The denominator is 2bc, which is calculated as `2 * sum_bc`.
+        //- The numerator is (`sum_bc`)² - a², which is calculated as `sum_bc * sum_bc - a * a`.
+        //
+        // So, the potential 'b' value can be calculated as 
+        // `numerator / denominator` if `numerator % denominator == 0` 
+        // (i.e., if the numerator is divisible by the denominator).
+
+        let denominator = 2 * sum_bc;
+        let numerator = sum_bc * sum_bc - a * a;
+
+        // Check if 'b' is an integer (valid Pythagorean triple)
+        if numerator % denominator == 0 {
+            let b = numerator / denominator;
+
+            // Ensure 'a' is the shorter leg (avoid duplicates)
+            if a < b {
+                // Calculate the third side ('c')
+                let c = sum - a - b;
+
+                // Store the valid Pythagorean triple
+                triplets.insert([a, b, c]);
             }
         }
     }
@@ -35,8 +54,3 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
 
 
 
-// the previous error that only PRIMITIVE TRIPLETS have to
-// respect the following conditions:
-// m and n must have different parity
-// the greatest common divisor of m and n must be 1
-// moreover I forgot to add the multiplication factor k
