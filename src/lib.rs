@@ -1,12 +1,14 @@
 use std::collections::HashSet;
 use num::integer::gcd;
 
+// Euclid's formula
+// a = m^2 - n^2, b = 2mn, c = m^2 + n^2
+
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     let mut triplets = HashSet::new();
 
     // Precompute squares
     let squares: Vec<u32> = (0..=sum).map(|x| x * x).collect();
-
 
     for m in 2..sum {
         for n in 1..m {
@@ -15,6 +17,9 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
                     let a = k * (squares[m as usize] - squares[n as usize]);
                     let b = k * 2 * m * n;
                     let c = k * (squares[m as usize] + squares[n as usize]);
+                    if a + b + c > sum {
+                        break;
+                    }
                     if a + b + c == sum {
                         let mut triplet = [a, b, c];
                         triplet.sort();
