@@ -12,7 +12,7 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
 
     find_squares(sum as u32)
         .iter()
-        .for_each(|&(a, b)| {
+        .for_each(|&(m, n)| {
 
         });
 
@@ -24,11 +24,11 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
 
 
 fn are_coprime(m: u32, n: u32) -> bool {
-    gcd(a, b) == 1
+    gcd(m, n) == 1
 }
 
 fn have_different_parity(m: u32, n: u32) -> bool {
-    a % 2 != b % 2
+    m % 2 != n % 2
 }
 
 
