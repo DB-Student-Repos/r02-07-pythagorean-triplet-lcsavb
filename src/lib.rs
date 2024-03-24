@@ -4,7 +4,7 @@ use num::integer::gcd;
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     let mut triplets = HashSet::new();
     // Euclid's formula
-    // a = m^2 - n^2, b = 2mn, c = m^2 + n^2
+    // a = m^2 - n^2, b = 2mn, sum = m^2 + n^2
     // m and n must have different parity
     // the greatest common divisor of m and n must be 1
 
@@ -13,7 +13,7 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     find_squares(sum as u32)
         .iter()
         .for_each(|&(a, b)| {
-            
+
         });
 
     triplets
