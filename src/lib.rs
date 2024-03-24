@@ -33,5 +33,14 @@ fn have_different_parity(m: u32, n: u32) -> bool {
 
 
 pub fn find_squares(sum: u32) -> Vec<(u32, u32)> {
-    unimplemented!()
+    let mut squares = Vec::new();
+
+    for m in 1..sum {
+        for n in 1..sum {
+            if m.pow(2) + n.pow(2) == sum {
+                squares.push((m, n));
+            }
+        }
+    }
+    squares
 }
