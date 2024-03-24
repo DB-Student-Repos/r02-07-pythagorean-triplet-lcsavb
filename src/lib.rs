@@ -6,9 +6,15 @@ use std::collections::HashSet;
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
     let mut triplets = HashSet::new();
 
-    // Loop through possible values of 'a' (shortest side)
-    for a in 1..=sum / 3 {
-        
+    
+    let mut a = 1;
+    loop {
+        // Loop through possible values of 'a' (shortest side)
+        // it will certainly be always less than the sum divided by 3
+        if a > sum / 3 {
+            break;
+        }
+
         // Calculate the remaining sum for sides 'b' and 'c'
         let sum_bc = sum - a;
 
@@ -26,31 +32,27 @@ pub fn find(sum: u32) -> HashSet<[u32; 3]> {
         //
         //- The denominator is 2bc, which is calculated as `2 * sum_bc`.
         //- The numerator is (`sum_bc`)² - a², which is calculated as `sum_bc * sum_bc - a * a`.
-        //
-        // So, the potential 'b' value can be calculated as 
-        // `numerator / denominator` if `numerator % denominator == 0` 
-        // (i.e., if the numerator is divisible by the denominator).
 
         let denominator = 2 * sum_bc;
         let numerator = sum_bc * sum_bc - a * a;
 
-        // Check if 'b' is an integer (valid Pythagorean triple)
+        // If 'b' is an integer
         if numerator % denominator == 0 {
             let b = numerator / denominator;
 
-            // Ensure 'a' is the shorter leg (avoid duplicates)
+            // Ensure 'a' is the shortest side
             if a < b {
-                // Calculate the third side ('c')
                 let c = sum - a - b;
 
-                // Store the valid Pythagorean triple
+                // Store the triplet
                 triplets.insert([a, b, c]);
             }
         }
+
+        a += 1;
     }
 
     triplets
 }
-
 
 
